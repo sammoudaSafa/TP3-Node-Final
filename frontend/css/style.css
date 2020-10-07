@@ -1,0 +1,66 @@
+#coreContainer{
+    width: 80%;
+    margin: 0 auto;
+}
+.menuBar{
+    height: 60px;
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   background-color: greenyellow;
+   text-align: center;
+}
+
+.menuBar a{
+    color: teal;
+    padding: 20px 0;
+    text-align: center;
+    margin: 10px;
+}
+
+.header-main>a,  .body2 a button, .body2 div>button{
+    background-color: teal;
+    color: greenyellow;
+    padding:0 20px ;
+    text-align: center;
+    margin: 0 10px;
+}
+
+
+.menuBar a:hover{
+    color: yellow;
+    background-color: teal;
+    font-family: Pussycat, Algerian, Broadway;
+}
+
+.home img{
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home h1, .home h2,.home .contenu , .body2 h3{
+    text-align: center;
+}
+
+ .body2 div ,.body2 form{
+    margin: 0 auto;
+}
+
+.ReactModal__Content{
+    width: 50%;
+    height: 50%;
+    margin: 0 auto;
+} 
+
+.body2 form{
+    background-color: turquoise;
+}
+
+.body2 form button{
+    padding: 10px 50px;
+    margin: 20px;
+    font-weight: bolder;
+    background-color: deepskyblue;
+}
