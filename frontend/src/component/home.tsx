@@ -1,5 +1,4 @@
 import React from 'react';
-import { CommentsEditor } from './commentseditor';
 interface Props { }
 interface State {
 }
@@ -26,11 +25,6 @@ export class Home extends React.Component<Props, State> {
                     produits chimiques. La fierté d’un héritage ou le symbole du cheval représente
                     la fertilité et de prospérité a cartage, la royaume des amazighs.
                 </p>
-                <div className={'body2'} >
-                    <CommentsEditor />
-                </div>
-
-
             </div>
         </>;
     }
