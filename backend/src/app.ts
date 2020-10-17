@@ -1,6 +1,7 @@
 import bodyParser from 'body-parser';
 import errorHandler from 'errorhandler';
 import express from 'express';
+import { authRouter } from './router/authrouter';
 import { commentRouter } from './router/commentrouter';
 
 const app = express();
@@ -23,5 +24,7 @@ app.use((_req, res, next) => {
 // });
 
 app.use('/comment', commentRouter);
+app.use('/auth', authRouter);
+
 
 export { app };
