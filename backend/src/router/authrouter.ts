@@ -10,8 +10,7 @@ authRouter.get('/login', wrap(async (req, res) => {
     const username = req.query.username as string;
     const password = req.query.password as string;
     const user = users.find(userBeingSearched => userBeingSearched.username === username);
-    if (!user) { return res.sendStatus(401); }
-    const matches = await bcrypt.compare(password, user.password);
+    const matches = await bcrypt.compare(password, user?.password ?? '');
     if (!matches) { return res.sendStatus(401); }
     // const hash = await bcrypt.hash(password, slatRounds);
     // console.log(`${hash}`);
