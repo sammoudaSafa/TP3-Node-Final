@@ -7,7 +7,6 @@ import { commentRouter } from './router/commentrouter';
 const app = express();
 
 app.set('trust proxy', 'loopback');
-
 app.use(errorHandler({ log: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
