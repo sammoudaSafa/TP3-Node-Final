@@ -11,7 +11,9 @@ const knex = DBProvider.getKnexConnection();
 // const users = [{ username: 'safa', password: '$2b$10$ZtZko2qKObAfLQ17eapOseN9gQRJhQY/vcNwNx.7Onyei/lJ7i0Ua' }];
 // const slatRounds = 10;
 
-authRouter.get('/login', passport.authenticate('local', { session: true }), (req, res) => {
+authRouter.get('/login', passport.authenticate('local', {
+    session: true
+}), (req, res) => {
     // const username = req.query.username as string;
     // const password = req.query.password as string;
     // const user = users.find(userBeingSearched => userBeingSearched.username === username);
@@ -19,6 +21,7 @@ authRouter.get('/login', passport.authenticate('local', { session: true }), (req
     // if (!matches) { return res.sendStatus(401); }
     // const hash = await bcrypt.hash(password, slatRounds);
     // console.log(`${hash}`);
+
     if (req.user) {
         res.send();
     } else {
@@ -40,5 +43,4 @@ const loginHandler = async (username: string, password: string, done: (error: an
 
 };
 
-export { authRouter };
-export { loginHandler };
+export { authRouter, loginHandler };

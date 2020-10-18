@@ -1,4 +1,3 @@
-
 export class ParticipantModel {
     public participantId: number;
     public name: string;

@@ -25,6 +25,7 @@
     },
     "include": [
         "src/**/*",
-        "typings/**/*"
+        "typings/**/*",
+        "src/model/usermodel.ts"
     ]
 }
