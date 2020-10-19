@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import { UserModel } from 'common';
 import errorHandler from 'errorhandler';
 import express from 'express';
 import MySQLStore from 'express-mysql-session';
@@ -6,8 +7,11 @@ import session from 'express-session';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
 import { config } from './config';
+import { AuthDAO } from './dao/authdao';
 import { authRouter, loginHandler } from './router/authrouter';
 import { commentRouter } from './router/commentrouter';
+
+const authDAO = new AuthDAO;
 
 const sessionStore = new (MySQLStore(session as any))({
     host: config.database.url,
@@ -38,11 +42,12 @@ app.use((_req, res, next) => {
     res.header('Pragma', 'no-cache');
     next();
 });
-passport.deserializeUser((user, done) => {
+passport.deserializeUser(async (userId: number, done) => {
+    const user = await authDAO.getUserById(userId);
     done(null, user);
 });
-passport.serializeUser((user, done) => {
-    done(null, user);
+passport.serializeUser((user: UserModel, done) => {
+    done(null, user.userId);
 });
 passport.use(new Strategy(loginHandler));
 

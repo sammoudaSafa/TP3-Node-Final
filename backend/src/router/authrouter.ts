@@ -2,12 +2,12 @@
 import bcrypt from 'bcrypt';
 import { Router } from 'express';
 import passport from 'passport';
-import { DBProvider } from '../dbprovider';
+import { AuthDAO } from '../dao/authdao';
 
 
 const authRouter = Router();
-const knex = DBProvider.getKnexConnection();
-
+// const knex = DBProvider.getKnexConnection();
+const authDAO = new AuthDAO;
 // const users = [{ username: 'safa', password: '$2b$10$ZtZko2qKObAfLQ17eapOseN9gQRJhQY/vcNwNx.7Onyei/lJ7i0Ua' }];
 // const slatRounds = 10;
 
@@ -31,11 +31,12 @@ authRouter.get('/login', passport.authenticate('local', {
 });
 
 const loginHandler = async (username: string, password: string, done: (error: any, user?: any) => void) => {
-    const user = await knex('user').first('userId', 'username', 'password').where({ username });
-    if (user === undefined) {
+    // const user = await knex('user').first('userId', 'username', 'password').where({ username });
+    const user = await authDAO.getUser(username);
+    if (user === null) {
         return done(null, false);
     }
-    if (await bcrypt.compare(password, user.password)) {
+    if (await bcrypt.compare(password, user.password!)) {
         delete user.password;
         return done(null, user);
     }

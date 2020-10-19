@@ -9,4 +9,8 @@ export class AuthDAO {
         const user: UserModel | null = await this.knex('user').first('userId', 'username', 'password').where({ username });
         return user;
     }
+    public async getUserById(userId: number) {
+        const user: UserModel | null = await this.knex('user').first('userId', 'username', 'password').where({ userId });
+        return user;
+    }
 }
