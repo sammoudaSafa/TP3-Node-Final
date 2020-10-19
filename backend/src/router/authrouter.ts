@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { Router } from 'express';
 import passport from 'passport';
 import { AuthDAO } from '../dao/authdao';
+import { wrap } from '../util';
 
 
 const authRouter = Router();
@@ -29,6 +30,22 @@ authRouter.get('/login', passport.authenticate('local', {
     }
     return res.send();
 });
+// logout
+authRouter.get('/logout', wrap(async (req, res) => {
+    if (!req.session) { return res.send(); }
+    req.session.destroy(err => {
+        if (err === !undefined) {
+            console.error(`Error destroying session, ${err}`);
+        }
+    });
+    return res.send();
+}));
+
+// user
+authRouter.get('/user', wrap(async (req, res) => {
+    if (!req.user) { return res.sendStatus(404); }
+    return res.send(req.user);
+}));
 
 const loginHandler = async (username: string, password: string, done: (error: any, user?: any) => void) => {
     // const user = await knex('user').first('userId', 'username', 'password').where({ username });
