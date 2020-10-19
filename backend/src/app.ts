@@ -19,7 +19,7 @@ const sessionStore = new (MySQLStore(session as any))({
 const app = express();
 app.use(session({
     name: 'archetype_session',
-    secret: '',
+    secret: 'OIA6VpPDtfSYNh2AX*r',
     store: sessionStore,
     resave: false,
     saveUninitialized: false
