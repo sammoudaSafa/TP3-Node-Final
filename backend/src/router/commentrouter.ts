@@ -1,9 +1,8 @@
 import { CommentModel, Permission } from 'common';
-import { Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { CommentDAO } from '../dao/commentdao';
 import { wrap } from '../util';
 import { participantRouter } from './participantrouter';
-
 const commentRouter = Router();
 const commentDAO = new CommentDAO;
 
@@ -24,26 +23,20 @@ commentRouter.get('/:commentId', wrap(async (req, res) => {
     return res.send(req.comment);
 }));
 
-commentRouter.post('/', wrap(async (req, res) => {
-    if (!req.user?.hasPermission(Permission.createComment)) {
-        return res.sendStatus(403);
-    }
+commentRouter.post('/', hasPermission(Permission.createComment), wrap(async (req, res) => {
     const comment = CommentModel.fromJSON(req.body);
     const commentId = await commentDAO.createComment(comment);
     return res.send(await commentDAO.getComment(commentId));
 }));
 
-commentRouter.put('/:commentId', wrap(async (req, res) => {
+commentRouter.put('/:commentId', hasPermission(Permission.modifyComment), wrap(async (req, res) => {
     const updated = CommentModel.fromJSON(req.body);
     updated.commentId = req.comment.commentId;
     await commentDAO.updateComment(updated);
     return res.send(await commentDAO.getComment(req.comment.commentId));
 }));
 
-commentRouter.delete('/:commentId', wrap(async (req, res) => {
-    if (!req.user?.hasPermission(Permission.createComment)) {
-        return res.sendStatus(403);
-    }
+commentRouter.delete('/:commentId', hasPermission(Permission.deleteComment), wrap(async (req, res) => {
     await commentDAO.deleteComment(req.comment.commentId);
     return res.sendStatus(204);
 }));
@@ -51,3 +44,12 @@ commentRouter.delete('/:commentId', wrap(async (req, res) => {
 commentRouter.use('/:commentId/participant', participantRouter);
 
 export { commentRouter };
+
+function hasPermission(permission: Permission) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        if (!req.user?.hasPermission(permission)) {
+            return res.sendStatus(403);
+        }
+        return next();
+    };
+}
