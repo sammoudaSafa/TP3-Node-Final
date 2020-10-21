@@ -1,1 +1,2 @@
-export * from '../model/role';
+export * from './permission';
+export * from './role';

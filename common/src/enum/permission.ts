@@ -1,4 +1,4 @@
-import { Role } from '../model/role';
+import { Role } from './role';
 
 export enum Permission {
     createComment = 'create comment',

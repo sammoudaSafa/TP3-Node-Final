@@ -1,4 +1,4 @@
-import { CommentModel, ParticipantModel } from "common";
+import { CommentModel, ParticipantModel, UserModel } from "common";
 
 declare global {
     module Express {
@@ -6,5 +6,6 @@ declare global {
             comment: CommentModel;
             participant: ParticipantModel;
         }
+        interface User extends UserModel
     }
 }
