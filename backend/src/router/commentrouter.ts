@@ -1,4 +1,4 @@
-import { CommentModel } from 'common';
+import { CommentModel, Permission } from 'common';
 import { Router } from 'express';
 import { CommentDAO } from '../dao/commentdao';
 import { wrap } from '../util';
@@ -25,6 +25,9 @@ commentRouter.get('/:commentId', wrap(async (req, res) => {
 }));
 
 commentRouter.post('/', wrap(async (req, res) => {
+    if (!req.user?.hasPermission(Permission.createComment)) {
+        return res.sendStatus(403);
+    }
     const comment = CommentModel.fromJSON(req.body);
     const commentId = await commentDAO.createComment(comment);
     return res.send(await commentDAO.getComment(commentId));
@@ -38,6 +41,9 @@ commentRouter.put('/:commentId', wrap(async (req, res) => {
 }));
 
 commentRouter.delete('/:commentId', wrap(async (req, res) => {
+    if (!req.user?.hasPermission(Permission.createComment)) {
+        return res.sendStatus(403);
+    }
     await commentDAO.deleteComment(req.comment.commentId);
     return res.sendStatus(204);
 }));
