@@ -1,5 +1,5 @@
 import { Api } from 'api';
-import { CommentModel } from 'common';
+import { CommentModel, Permission, UserModel } from 'common';
 import React from 'react';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ interface State {
     contentMessage?: string;
     publicationDate?: Date;
     commentBeingEdited?: CommentModel;
+    user?: UserModel | null;
 }
 
 export class CommentsEditor extends React.Component<Props, State> {
@@ -26,11 +27,13 @@ export class CommentsEditor extends React.Component<Props, State> {
     public async componentDidMount() {
         const comments = (await this.api.getJson('/comment') as any[]).map(CommentModel.fromJSON);
         this.setState({ comments });
+        const user = await this.api.getJson('/auth/user');
+        this.setState({ comments, user: user ? UserModel.fromJSON(user) : undefined });
     }
 
     public render() {
-        const { comments } = this.state;
-        if (!comments) { return 'Chargement...'; }
+        const { comments, user } = this.state;
+        if (!comments || user === undefined) { return 'Chargement...'; }
 
         const dateFormat = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
         return <>
@@ -67,7 +70,7 @@ export class CommentsEditor extends React.Component<Props, State> {
                 </table>
                 <br />
                 <Link to={`/comments/${comment.commentId}`}><button >Visionner</button></Link>
-                <button onClick={() => this.setState({ commentBeingEdited: comment })} >Modifier</button>
+                {user?.hasPermission(Permission.deleteComment)}&& <button onClick={() => this.setState({ commentBeingEdited: comment })} >Modifier</button>
                 <button onClick={() => this.deleteComment(comment)} >Supprimer</button>
                 <br />
             </div>)}
